@@ -4,10 +4,6 @@ export default function ReviewHistory({ onLoadReview, currentReview }) {
   const [reviews, setReviews] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  useEffect(() => {
-    loadReviews();
-  }, [currentReview]);
-
   const loadReviews = () => {
     try {
       const stored = localStorage.getItem('codeReviews');
@@ -19,32 +15,10 @@ export default function ReviewHistory({ onLoadReview, currentReview }) {
     }
   };
 
-  const saveReview = (code, language, review) => {
-    try {
-      const newReview = {
-        id: Date.now(),
-        timestamp: new Date().toLocaleString(),
-        code,
-        language,
-        review,
-      };
-
-      const stored = localStorage.getItem('codeReviews');
-      const allReviews = stored ? JSON.parse(stored) : [];
-      allReviews.unshift(newReview);
-
-      // Keep only last 20 reviews
-      if (allReviews.length > 20) {
-        allReviews.pop();
-      }
-
-      localStorage.setItem('codeReviews', JSON.stringify(allReviews));
-      setReviews(allReviews);
-      return newReview.id;
-    } catch (error) {
-      console.error('Error saving review:', error);
-    }
-  };
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadReviews();
+  }, [currentReview]);
 
   const deleteReview = (id) => {
     try {
@@ -132,30 +106,3 @@ export default function ReviewHistory({ onLoadReview, currentReview }) {
 }
 
 export { ReviewHistory };
-export const useReviewHistory = () => {
-  return {
-    saveReview: (code, language, review) => {
-      const newReview = {
-        id: Date.now(),
-        timestamp: new Date().toLocaleString(),
-        code,
-        language,
-        review,
-      };
-
-      try {
-        const stored = localStorage.getItem('codeReviews');
-        const allReviews = stored ? JSON.parse(stored) : [];
-        allReviews.unshift(newReview);
-
-        if (allReviews.length > 20) {
-          allReviews.pop();
-        }
-
-        localStorage.setItem('codeReviews', JSON.stringify(allReviews));
-      } catch (error) {
-        console.error('Error saving review:', error);
-      }
-    },
-  };
-};

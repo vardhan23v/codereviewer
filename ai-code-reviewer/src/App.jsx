@@ -5,7 +5,7 @@ import ScoringDashboard from './components/ScoringDashboard';
 import ReviewHistory from './components/ReviewHistory';
 import CorrectedCode from './components/CorrectedCode';
 import { reviewCode, detectLanguage } from './services/codeReviewService';
-import { useReviewHistory } from './components/ReviewHistory';
+import { useReviewHistory } from './hooks/useReviewHistory';
 import './App.css';
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
     }
   };
 
-  const handleFileUpload = (filename, content) => {
+  const handleFileUpload = (filename) => {
     const ext = filename.split('.').pop().toLowerCase();
     const langMap = {
       js: 'javascript',

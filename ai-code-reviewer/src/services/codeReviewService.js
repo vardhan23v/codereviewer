@@ -149,10 +149,11 @@ export const reviewCode = async (code, language) => {
   let result;
   try {
     result = JSON.parse(cleaned);
-  } catch (e) {
+  } catch {
     // Escape control chars ONLY inside JSON string values (between quotes)
     cleaned = cleaned.replace(/"(?:[^"\\]|\\.)*"/g, (match) => {
-      return match.replace(/[\x00-\x1F\x7F]/g, (ch) => {
+      // eslint-disable-next-line no-control-regex
+      return match.replace(/[\u0000-\u001F\u007F]/g, (ch) => {
         const map = { '\n': '\\n', '\r': '\\r', '\t': '\\t', '\b': '\\b', '\f': '\\f' };
         return map[ch] || '';
       });
