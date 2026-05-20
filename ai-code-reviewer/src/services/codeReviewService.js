@@ -1,6 +1,8 @@
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const getKeys = () => ({
+  GEMINI_API_KEY: localStorage.getItem('VITE_GEMINI_API_KEY') || import.meta.env.VITE_GEMINI_API_KEY || '',
+  OPENAI_API_KEY: localStorage.getItem('VITE_OPENAI_API_KEY') || import.meta.env.VITE_OPENAI_API_KEY || '',
+  GROQ_API_KEY: localStorage.getItem('VITE_GROQ_API_KEY') || import.meta.env.VITE_GROQ_API_KEY || '',
+});
 
 const buildPrompt = (code, language) => `You are an expert code reviewer. Analyze the provided ${language} code and provide structured feedback in the following JSON format:
 {
@@ -34,6 +36,7 @@ ${code}`;
 
 // --- Gemini API ---
 const callGemini = async (prompt) => {
+  const { GEMINI_API_KEY } = getKeys();
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   const response = await fetch(url, {
@@ -57,6 +60,7 @@ const callGemini = async (prompt) => {
 
 // --- OpenAI (ChatGPT) API ---
 const callOpenAI = async (prompt) => {
+  const { OPENAI_API_KEY } = getKeys();
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -83,6 +87,7 @@ const callOpenAI = async (prompt) => {
 
 // --- Groq API (FREE - Llama models) ---
 const callGroq = async (prompt) => {
+  const { GROQ_API_KEY } = getKeys();
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -113,6 +118,8 @@ export const reviewCode = async (code, language) => {
   let text;
   let usedProvider = '';
 
+  const { GEMINI_API_KEY, OPENAI_API_KEY, GROQ_API_KEY } = getKeys();
+
   // Provider chain: Gemini -> OpenAI -> Groq
   const providers = [
     { name: 'Gemini', key: GEMINI_API_KEY, call: callGemini },
@@ -138,10 +145,11 @@ export const reviewCode = async (code, language) => {
   if (!text) {
     const configured = providers.filter(p => p.key).map(p => p.name);
     if (configured.length === 0) {
-      throw new Error('No API keys configured. Add VITE_GEMINI_API_KEY, VITE_OPENAI_API_KEY, or VITE_GROQ_API_KEY to your .env file.');
+      throw new Error('No API keys configured. Please click the Settings (⚙️) icon in the top right to configure your API keys (Gemini, ChatGPT, or Groq) in your browser.');
     }
-    throw new Error(`All AI providers failed (${configured.join(', ')}). Please try again later.`);
+    throw new Error(`All AI providers failed (${configured.join(', ')}). Please check your API keys or try again later.`);
   }
+
 
 
   let cleaned = text.replace(/```json|```/g, '').trim();

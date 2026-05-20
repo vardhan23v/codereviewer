@@ -4,6 +4,7 @@ import ReviewOutput from './components/ReviewOutput';
 import ScoringDashboard from './components/ScoringDashboard';
 import ReviewHistory from './components/ReviewHistory';
 import CorrectedCode from './components/CorrectedCode';
+import SettingsModal from './components/SettingsModal';
 import { reviewCode, detectLanguage } from './services/codeReviewService';
 import { useReviewHistory } from './hooks/useReviewHistory';
 import './App.css';
@@ -16,6 +17,8 @@ function App() {
   const [error, setError] = useState(null);
   const { saveReview } = useReviewHistory();
   const [currentReviewId, setCurrentReviewId] = useState(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
 
   const handleReview = async () => {
     if (!code.trim()) {
@@ -164,9 +167,17 @@ function App() {
               <h1 className="app-main-title text-3xl sm:text-4xl font-bold mb-1">🤖 AI Code Reviewer</h1>
               <p className="text-slate-300">Get intelligent code review feedback powered by AI</p>
             </div>
-            <div className="app-status-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              Analysis Engine Online
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setIsSettingsOpen(true)}
+                className="flex items-center gap-1.5 px-4 py-2 bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-full text-sm font-medium text-slate-200 transition shadow-sm"
+              >
+                ⚙️ Settings
+              </button>
+              <div className="app-status-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Analysis Engine Online
+              </div>
             </div>
           </div>
         </header>
@@ -236,6 +247,8 @@ function App() {
             <p className="text-slate-400">Secure • Performant • Maintainable</p>
           </div>
         </footer>
+
+        <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       </div>
     </div>
   );
