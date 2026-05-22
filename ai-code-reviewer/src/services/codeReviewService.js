@@ -114,13 +114,46 @@ const callGroq = async (prompt) => {
 
 // --- Main review function with fallback chain ---
 export const reviewCode = async (code, language) => {
+  const { GEMINI_API_KEY, OPENAI_API_KEY, GROQ_API_KEY } = getKeys();
+
+  // Try calling the Vercel serverless proxy endpoint first
+  try {
+    const response = await fetch('/api/review', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code,
+        language,
+        customKeys: {
+          GEMINI_API_KEY,
+          OPENAI_API_KEY,
+          GROQ_API_KEY,
+        },
+      }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    }
+
+    // If the endpoint exists but threw a structured API error, propagate it
+    if (response.status !== 404) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error || `Serverless Proxy Error: ${response.status}`);
+    }
+  } catch (backendError) {
+    // Only log a warning and fallback if it's a 404 (local dev without vercel CLI) or a network connection failure
+    console.warn('Vercel serverless proxy unavailable/failed. Falling back to local client-side direct calls:', backendError.message);
+  }
+
+  // --- FALLBACK: Client-side direct provider call (useful for local testing) ---
   const prompt = buildPrompt(code, language);
   let text;
   let usedProvider = '';
 
-  const { GEMINI_API_KEY, OPENAI_API_KEY, GROQ_API_KEY } = getKeys();
-
-  // Provider chain: Gemini -> OpenAI -> Groq
   const providers = [
     { name: 'Gemini', key: GEMINI_API_KEY, call: callGemini },
     { name: 'ChatGPT', key: OPENAI_API_KEY, call: callOpenAI },
@@ -134,7 +167,7 @@ export const reviewCode = async (code, language) => {
     try {
       text = await provider.call(prompt);
       usedProvider = provider.name;
-      console.log(`✅ Review completed using ${provider.name}`);
+      console.log(`✅ Review completed locally using ${provider.name}`);
       break;
     } catch (err) {
       console.warn(`⚠️ ${provider.name} failed: ${err.message}`);
@@ -149,8 +182,6 @@ export const reviewCode = async (code, language) => {
     }
     throw new Error(`All AI providers failed (${configured.join(', ')}). Please check your API keys or try again later.`);
   }
-
-
 
   let cleaned = text.replace(/```json|```/g, '').trim();
 
