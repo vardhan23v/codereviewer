@@ -161,21 +161,21 @@ function App() {
     <div className="app-shell p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <header className="app-topbar mb-6 rounded-xl px-6 py-5">
+        <header className="app-topbar mb-6 rounded-2xl px-6 py-5 border border-white/5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="app-main-title text-3xl sm:text-4xl font-bold mb-1">🤖 AI Code Reviewer</h1>
-              <p className="text-slate-300">Get intelligent code review feedback powered by AI</p>
+              <h1 className="app-main-title text-3xl sm:text-4xl font-bold mb-1 text-gradient-primary">🤖 AI Code Reviewer</h1>
+              <p className="text-slate-300 text-sm sm:text-base font-heading">Get intelligent code review feedback powered by AI</p>
             </div>
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setIsSettingsOpen(true)}
-                className="flex items-center gap-1.5 px-4 py-2 bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 rounded-full text-sm font-medium text-slate-200 transition shadow-sm"
+                className="btn-glow btn-glow-secondary flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition shadow-sm"
               >
                 ⚙️ Settings
               </button>
-              <div className="app-status-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              <div className="app-status-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium font-heading">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                 Analysis Engine Online
               </div>
             </div>
@@ -241,10 +241,10 @@ function App() {
         )}
 
         {/* Footer */}
-        <footer className="app-footer mt-6 rounded-xl px-6 py-4">
+        <footer className="glass-panel mt-6 rounded-2xl px-6 py-4 border border-white/5">
           <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-            <p>AI Code Reviewer • Built for fast, high-quality code audits.</p>
-            <p className="text-slate-400">Secure • Performant • Maintainable</p>
+            <p className="text-slate-300 font-heading">🤖 AI Code Reviewer • Professional Workspace</p>
+            <p className="text-slate-400">Secure Backend • High Performance • Verified Audits</p>
           </div>
         </footer>
 

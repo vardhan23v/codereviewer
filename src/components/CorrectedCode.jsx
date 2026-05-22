@@ -17,28 +17,32 @@ const CorrectedCode = ({ correctedCode, review, language, onApplyToEditor, onCop
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+    <div className="glass-panel rounded-2xl p-6 border border-white/5 shadow-2xl">
       {/* Header with title and issue count */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
         <div>
-          <h3 className="text-xl font-bold text-white mb-1">✨ Corrected Code</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-xl font-extrabold text-white mb-1 font-heading flex items-center gap-2">
+            <span>✨</span> Corrected Code Recommendation
+          </h3>
+          <p className="text-sm">
             {totalIssuesFixed > 0 ? (
               <>
-                <span className="text-green-400 font-semibold">{totalIssuesFixed} issues fixed</span>
-                <span className="text-gray-500"> • Ready to apply</span>
+                <span className="text-emerald-400 font-semibold font-heading bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full text-xs">
+                  {totalIssuesFixed} recommendations applied
+                </span>
+                <span className="text-slate-400 text-xs ml-2 font-sans font-medium">Ready to apply to workspace</span>
               </>
             ) : (
-              <span className="text-green-400">No issues to fix</span>
+              <span className="text-emerald-400 text-xs bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-heading">No warnings or critical issues to refactor</span>
             )}
           </p>
         </div>
       </div>
 
       {/* Code editor */}
-      <div className="mb-4 border border-gray-600 rounded-lg overflow-hidden">
+      <div className="mb-5 border border-white/10 rounded-xl overflow-hidden shadow-inner bg-[#040711]/60">
         <Editor
-          height="300px"
+          height="320px"
           language={language}
           value={correctedCode}
           options={{
@@ -49,7 +53,7 @@ const CorrectedCode = ({ correctedCode, review, language, onApplyToEditor, onCop
             fontSize: 13,
             lineNumbers: 'on',
             theme: 'vs-dark',
-            padding: { top: 10, bottom: 10 },
+            padding: { top: 12, bottom: 12 },
           }}
           theme="vs-dark"
         />
@@ -59,21 +63,22 @@ const CorrectedCode = ({ correctedCode, review, language, onApplyToEditor, onCop
       <div className="flex gap-3 justify-end">
         <button
           onClick={handleCopy}
-          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors flex items-center gap-2"
+          className="btn-glow btn-glow-secondary px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-1.5"
         >
-          📋 Copy Fixed Code
+          <span>📋</span> Copy Fixed Code
         </button>
         <button
           onClick={handleApply}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-2"
+          className="btn-glow btn-glow-primary px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-1.5"
         >
-          ↙️ Apply to Editor
+          <span>↙️</span> Apply to Editor
         </button>
       </div>
 
       {/* Info message */}
-      <div className="mt-4 p-3 bg-blue-900 border border-blue-700 rounded text-sm text-blue-200">
-        ℹ️ Applying this code will replace the current code in the editor. You can always review the differences before saving.
+      <div className="mt-4 p-3 bg-indigo-500/10 border border-indigo-500/20 text-xs sm:text-sm text-indigo-300 rounded-xl flex items-center gap-2 font-heading leading-relaxed">
+        <span>ℹ️</span> 
+        <span>Applying this recommended refactor will replace the current draft in your editor workspace.</span>
       </div>
     </div>
   );

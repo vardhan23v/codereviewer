@@ -38,66 +38,73 @@ export default function ReviewHistory({ onLoadReview, currentReview }) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div className="flex flex-col h-full glass-panel rounded-2xl border border-white/5 overflow-hidden shadow-xl">
       {/* Header */}
-      <div className="bg-gray-700 p-4 border-b border-gray-600">
+      <div className="bg-slate-950/60 p-4 border-b border-white/5 backdrop-blur-md flex items-center justify-between">
         <button
           onClick={() => setShowHistory(!showHistory)}
-          className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded font-semibold transition flex justify-between items-center"
+          className="w-full text-left font-bold font-heading text-sm sm:text-base text-slate-100 flex justify-between items-center transition"
         >
-          <span>📚 Review History ({reviews.length})</span>
-          <span>{showHistory ? '▼' : '▶'}</span>
+          <span className="flex items-center gap-2">
+            <span>📚</span> Review History ({reviews.length})
+          </span>
+          <span className="text-xs text-slate-400">{showHistory ? '▼' : '▶'}</span>
         </button>
       </div>
 
       {/* History List */}
       {showHistory && (
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#040711]/45 max-h-[300px]">
           {reviews.length > 0 ? (
             <>
               <button
                 onClick={clearHistory}
-                className="w-full px-3 py-2 bg-red-900 hover:bg-red-800 border border-red-700 rounded text-sm font-medium transition text-red-200 mb-3"
+                className="w-full px-3 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 rounded-lg text-xs font-semibold transition"
               >
-                🗑️ Clear All History
+                🗑️ Clear History Cache
               </button>
 
-              {reviews.map((review) => (
+              {reviews.map((item) => (
                 <div
-                  key={review.id}
-                  className="bg-gray-700 p-3 rounded border border-gray-600 hover:border-gray-500 transition"
+                  key={item.id}
+                  className="bg-slate-950/30 p-3 rounded-xl border border-white/5 hover:border-indigo-500/30 hover:bg-slate-950/50 transition duration-300 shadow-sm"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <p className="font-mono text-sm text-blue-300">{review.language}</p>
-                      <p className="text-xs text-gray-400">{review.timestamp}</p>
+                      <p className="font-mono text-xs text-indigo-400 font-semibold bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded-md inline-block mb-1">
+                        {item.language}
+                      </p>
+                      <p className="text-[10px] text-slate-500 font-heading">{item.timestamp}</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       <button
-                        onClick={() => onLoadReview(review)}
-                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition"
+                        onClick={() => onLoadReview(item)}
+                        className="btn-glow btn-glow-primary px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1"
                       >
                         📂 Load
                       </button>
                       <button
-                        onClick={() => deleteReview(review.id)}
-                        className="px-3 py-1 bg-red-700 hover:bg-red-800 rounded text-xs font-medium transition"
+                        onClick={() => deleteReview(item.id)}
+                        className="btn-glow btn-glow-secondary hover:bg-rose-500/10 hover:border-rose-500/20 hover:text-rose-400 px-2 py-1 rounded-md text-xs font-semibold"
                       >
                         ✕
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-300">
-                    Score: <span className="font-bold text-blue-400">{review.review.overallScore}/100</span>
+                  <p className="text-xs text-slate-300 font-heading">
+                    Health Score: <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{item.review.overallScore}/100</span>
                   </p>
-                  <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                    {review.code.substring(0, 50)}...
+                  <p className="text-[11px] text-slate-400 font-mono mt-1.5 line-clamp-2 bg-slate-950/50 p-1.5 rounded border border-white/5">
+                    {item.code.trim().substring(0, 75)}...
                   </p>
                 </div>
               ))}
             </>
           ) : (
-            <p className="text-sm text-gray-400 italic text-center py-8">No reviews saved yet</p>
+            <div className="text-center py-6">
+              <span className="text-3xl inline-block mb-2 filter saturate-50">📁</span>
+              <p className="text-xs text-slate-500 italic">No saved audits in local history</p>
+            </div>
           )}
         </div>
       )}

@@ -49,16 +49,16 @@ export default function CodeEditor({
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div className="flex flex-col h-full glass-panel glass-panel-hover rounded-2xl shadow-2xl overflow-hidden border border-white/5">
       {/* Header */}
-      <div className="bg-gray-700 p-4 border-b border-gray-600">
-        <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">Language:</label>
+      <div className="bg-slate-950/60 p-4 border-b border-white/5 backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            <label className="text-sm font-heading text-slate-300 font-medium">Language:</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="px-3 py-2 bg-gray-600 border border-gray-500 rounded text-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1.5 bg-slate-950/80 border border-white/10 rounded-lg text-sm text-slate-200 hover:border-indigo-500/50 hover:bg-slate-950 transition cursor-pointer font-heading"
             >
               {languages.map((lang) => (
                 <option key={lang} value={lang}>
@@ -71,16 +71,25 @@ export default function CodeEditor({
           <div className="flex gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-2 bg-gray-600 hover:bg-gray-500 border border-gray-500 rounded text-sm font-medium transition"
+              className="btn-glow btn-glow-secondary px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-1.5"
             >
-              📁 Upload File
+              <span>📁</span> Upload File
             </button>
             <button
               onClick={onReview}
               disabled={!code.trim() || isLoading}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded text-sm font-medium transition"
+              className="btn-glow btn-glow-primary px-5 py-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-semibold transition flex items-center gap-1.5"
             >
-              {isLoading ? '⏳ Reviewing...' : '🔍 Review Code'}
+              {isLoading ? (
+                <>
+                  <span className="animate-spin inline-block h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full" />
+                  <span>Reviewing...</span>
+                </>
+              ) : (
+                <>
+                  <span>🔍</span> Review Code
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -94,7 +103,7 @@ export default function CodeEditor({
       </div>
 
       {/* Editor */}
-      <div className="flex-1">
+      <div className="flex-1 bg-[#040711]/60">
         <Editor
           height="100%"
           language={language}
@@ -107,6 +116,7 @@ export default function CodeEditor({
             fontFamily: "'Fira Code', 'Courier New', monospace",
             wordWrap: 'on',
             scrollBeyondLastLine: false,
+            padding: { top: 12, bottom: 12 },
           }}
         />
       </div>

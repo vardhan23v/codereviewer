@@ -4,8 +4,10 @@ import { BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, 
 export default function ScoringDashboard({ review }) {
   if (!review) {
     return (
-      <div className="flex items-center justify-center h-full bg-gray-800 rounded-lg">
-        <p className="text-gray-400">No review data to display</p>
+      <div className="flex flex-col items-center justify-center h-full glass-panel rounded-2xl p-6 text-center border border-white/5 min-h-[260px]">
+        <div className="text-4xl mb-3 animate-pulse">📊</div>
+        <p className="text-sm font-semibold text-slate-300 font-heading">Analytics Dashboard Offline</p>
+        <p className="text-xs text-slate-500 max-w-xs mt-1">Submit your code to view statistical breakdowns and charts.</p>
       </div>
     );
   }
@@ -22,11 +24,11 @@ export default function ScoringDashboard({ review }) {
   const overallScore = review.overallScore ?? 0;
 
   const sidebarStats = [
-    { key: 'Bugs', label: 'Bugs', value: review.categoryCounts?.Bugs || 0, color: 'text-red-400' },
-    { key: 'Quality', label: 'Quality', value: review.categoryCounts?.Quality || 0, color: 'text-blue-400' },
-    { key: 'Performance', label: 'Performance', value: review.categoryCounts?.Performance || 0, color: 'text-amber-400' },
-    { key: 'Security', label: 'Security', value: review.categoryCounts?.Security || 0, color: 'text-purple-400' },
-    { key: 'BestPractices', label: 'Best Practices', value: review.categoryCounts?.BestPractices || 0, color: 'text-emerald-400' },
+    { key: 'Bugs', label: '🐛 Bugs', value: review.categoryCounts?.Bugs || 0, color: 'text-rose-400' },
+    { key: 'Quality', label: '✨ Quality', value: review.categoryCounts?.Quality || 0, color: 'text-violet-400' },
+    { key: 'Performance', label: '⚡ Performance', value: review.categoryCounts?.Performance || 0, color: 'text-amber-400' },
+    { key: 'Security', label: '🔒 Security', value: review.categoryCounts?.Security || 0, color: 'text-sky-400' },
+    { key: 'BestPractices', label: '📋 Best Practices', value: review.categoryCounts?.BestPractices || 0, color: 'text-emerald-400' },
   ];
 
   const scoreData = [
@@ -38,7 +40,7 @@ export default function ScoringDashboard({ review }) {
     {
       name: 'Potential',
       value: 100 - overallScore,
-      fill: '#374151',
+      fill: '#1e293b',
     },
   ];
 
@@ -49,89 +51,101 @@ export default function ScoringDashboard({ review }) {
   };
 
   return (
-    <div className="dashboard-card h-full rounded-lg p-4 overflow-y-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
-        <aside className="dashboard-inner-card p-4 rounded-lg lg:col-span-4 xl:col-span-3">
-          <h3 className="text-lg font-bold mb-4 text-slate-100">Review Sidebar</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center justify-between border-b border-gray-700 pb-2">
-              <span className="text-slate-300">Overall Score</span>
-              <span className="font-bold text-slate-100">{overallScore}/100</span>
+    <div className="glass-panel h-full rounded-2xl p-5 overflow-y-auto border border-white/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-full">
+        {/* Left Side stats panel */}
+        <aside className="bg-slate-950/40 border border-white/5 p-4 rounded-xl lg:col-span-4 xl:col-span-3 shadow-inner">
+          <h3 className="text-sm font-bold font-heading mb-4 text-slate-100 uppercase tracking-wider">Metrics Panel</h3>
+          <div className="space-y-3.5 text-xs sm:text-sm">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <span className="text-slate-400">Overall Score</span>
+              <span className="font-bold text-slate-100 font-heading">{overallScore}/100</span>
             </div>
-            <div className="flex items-center justify-between border-b border-gray-700 pb-2">
-              <span className="text-slate-300">Issues by Category</span>
-              <span className="font-bold text-slate-100">{totalIssues}</span>
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <span className="text-slate-400">Total Recommendations</span>
+              <span className="font-bold text-slate-100 font-heading">{totalIssues}</span>
             </div>
             {sidebarStats.map((item) => (
-              <div key={item.key} className="flex items-center justify-between border-b border-gray-700 pb-2">
-                <span className="text-slate-300">{item.label}</span>
-                <span className={`font-bold ${item.color}`}>{item.value}</span>
+              <div key={item.key} className="flex items-center justify-between border-b border-white/5 pb-2">
+                <span className="text-slate-400">{item.label}</span>
+                <span className={`font-bold ${item.color} font-heading`}>{item.value}</span>
               </div>
             ))}
             <div className="flex justify-between pt-2">
-              <span className="text-slate-300">Critical</span>
-              <span className="font-semibold text-red-400">{severityCount.Critical}</span>
+              <span className="text-slate-400">🚨 Critical</span>
+              <span className="font-semibold text-rose-400 font-heading">{severityCount.Critical}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-300">Warning</span>
-              <span className="font-semibold text-amber-400">{severityCount.Warning}</span>
+              <span className="text-slate-400">⚠️ Warning</span>
+              <span className="font-semibold text-amber-400 font-heading">{severityCount.Warning}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-300">Info</span>
-              <span className="font-semibold text-blue-400">{severityCount.Info}</span>
+              <span className="text-slate-400">ℹ️ Info</span>
+              <span className="font-semibold text-sky-400 font-heading">{severityCount.Info}</span>
             </div>
           </div>
         </aside>
 
-        <section className="space-y-4 lg:col-span-8 xl:col-span-9">
-          <div className="dashboard-inner-card p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-4 text-slate-100">Overall Health Score</h3>
-            <div className="flex items-center justify-center">
-              <div className="relative w-32 h-32">
-                <ResponsiveContainer width={128} height={128}>
-                  <PieChart>
-                    <Pie
-                      data={scoreData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={45}
-                      outerRadius={65}
-                      paddingAngle={2}
-                      dataKey="value"
-                    >
-                      {scoreData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-slate-100">{overallScore}</p>
-                    <p className="text-xs text-gray-400">/100</p>
-                  </div>
+        {/* Charts Section */}
+        <section className="space-y-5 lg:col-span-8 xl:col-span-9 flex flex-col justify-between">
+          <div className="bg-slate-950/40 border border-white/5 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-around shadow-inner gap-4">
+            <div>
+              <h3 className="text-sm font-bold font-heading text-slate-200 uppercase tracking-wider mb-2 text-center sm:text-left">Code Health Score</h3>
+              <p className="text-xs text-slate-400 max-w-xs text-center sm:text-left">Based on weighted severity of issues found across all audited guidelines.</p>
+            </div>
+            <div className="relative w-28 h-28 flex-shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={scoreData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={36}
+                    outerRadius={50}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {scoreData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-xl font-extrabold text-slate-100 font-heading leading-none">{overallScore}</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-heading mt-0.5">health</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="dashboard-inner-card p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-4 text-slate-100">Issues by Category</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={categoryData}>
-                <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#d1deef' }} angle={-45} textAnchor="end" height={80} />
-                <YAxis tick={{ fontSize: 12, fill: '#d1deef' }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#172235',
-                    color: '#e6edf7',
-                    border: '1px solid #39517a',
-                    borderRadius: '8px',
-                  }}
-                />
-                <Bar dataKey="value" fill="#4f8cff" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="bg-slate-950/40 border border-white/5 p-4 rounded-xl shadow-inner flex-1 flex flex-col justify-between min-h-[220px]">
+            <h3 className="text-sm font-bold font-heading text-slate-200 uppercase tracking-wider mb-4">Issues Distribution</h3>
+            <div className="flex-1 w-full">
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={categoryData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} height={20} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(8, 12, 26, 0.95)',
+                      color: '#f8fafc',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRadius: '10px',
+                      fontSize: '11px',
+                      fontFamily: 'Inter, sans-serif'
+                    }}
+                  />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                    {categoryData.map((entry, index) => {
+                      const colors = ['#f43f5e', '#8b5cf6', '#f59e0b', '#0ea5e9', '#10b981'];
+                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                    })}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </section>
       </div>
