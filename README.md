@@ -1,10 +1,10 @@
 # 🤖 AI Code Reviewer
 
-**AI Code Reviewer** is a full-stack web application that provides intelligent, automated code review feedback powered by Claude AI. Upload or paste your code and receive structured feedback on bugs, code quality, performance, security, and best practices — all with an intuitive dark-themed interface.
+**AI Code Reviewer** is a full-stack web application that provides intelligent, automated code review feedback powered by Groq, Gemini, and OpenAI. Upload or paste your code and receive structured feedback on bugs, code quality, performance, security, and best practices — all with an intuitive dark-themed interface.
 
 ## 🚀 Features
 
-- **Intelligent Code Analysis**: Powered by Anthropic Claude 3.5 Sonnet for deep, context-aware code review.
+- **Multi-Provider AI**: Groq (Llama 3.3 70B — free tier), Gemini 2.0 Flash, and GPT-4o Mini with automatic fallback chain.
 - **Multi-Language Support**: Review code in Python, JavaScript, TypeScript, Java, C++, Go, and more.
 - **Monaco Code Editor**: Full VS Code-like editing experience with syntax highlighting and language detection.
 - **Scoring Dashboard**: Visual health score (0–100) with category breakdowns and severity charts via Recharts.
@@ -19,7 +19,7 @@
 - **Code Editor**: Monaco Editor (@monaco-editor/react)
 - **Charts**: Recharts
 - **HTTP Client**: Axios
-- **AI**: Anthropic Claude 3.5 Sonnet API
+- **AI**: Groq API (Llama 3.3 70B), Gemini API (2.0 Flash), OpenAI API (GPT-4o Mini)
 - **Storage**: Browser localStorage
 
 ## ⚙️ Getting Started
@@ -27,7 +27,7 @@
 ### Prerequisites
 
 - Node.js (v18+)
-- Anthropic API Key ([Get one here](https://console.anthropic.com/))
+- Groq API Key ([Get one free here](https://console.groq.com/keys)) — or optionally Gemini / OpenAI keys
 
 ### Installation
 
@@ -46,7 +46,9 @@
 
    Create a `.env` file in the root directory (see `.env.example`):
    ```env
-   VITE_ANTHROPIC_API_KEY=your_anthropic_api_key
+   VITE_GROQ_API_KEY=your_groq_api_key
+   VITE_GEMINI_API_KEY=your_gemini_api_key    # optional
+   VITE_OPENAI_API_KEY=your_openai_api_key    # optional
    ```
 
 4. **Run the development server**
@@ -78,7 +80,7 @@ codereviewer/
 │   │   ├── ScoringDashboard.jsx    # Charts and metrics
 │   │   └── ReviewHistory.jsx       # localStorage-based review history
 │   ├── services/
-│   │   └── codeReviewService.js    # Claude API integration
+│   │   └── codeReviewService.js    # Multi-provider AI integration (Groq, Gemini, OpenAI)
 │   ├── App.jsx                     # Main app component
 │   ├── App.css                     # App-specific styles
 │   ├── index.css                   # Tailwind directives
